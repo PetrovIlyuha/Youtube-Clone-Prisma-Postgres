@@ -1,3 +1,44 @@
-export async function getAuthUser(req, res, next) {}
+import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
 
-export async function protect(req, res, next) {}
+const prisma = new PrismaClient();
+
+export async function getAuthUser(req, res, next) {
+  if (!req.cookies.token) {
+    req.user = null;
+    return next();
+  }
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  let user = await prisma.user.findUnique({
+    where: { id: decoded.id },
+    include: { videos: true },
+  });
+  req.user = user;
+  next();
+}
+
+export async function protect(req, res, next) {
+  if (!req.cookies.token) {
+    returnNotAuthorizedError(next);
+  }
+  try {
+    const token = req.cookies.token;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    let user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+      include: { videos: true },
+    });
+    req.user = user;
+    next();
+  } catch (err) {
+    returnNotAuthorizedError(next);
+  }
+}
+
+const returnNotAuthorizedError = next => {
+  return next({
+    message: 'You need to be logged in to visit this route',
+    statusCode: 401,
+  });
+};
