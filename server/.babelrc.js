@@ -1,9 +1,9 @@
-const package = require("../package.json");
+const package = require('../package.json');
 
 module.exports = {
   presets: [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
         targets: {
           node: package.engines.node,
