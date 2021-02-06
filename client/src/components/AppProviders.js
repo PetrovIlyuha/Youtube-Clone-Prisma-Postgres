@@ -1,14 +1,38 @@
-import React from "react";
-import { ThemeProvider } from "styled-components";
-import GlobalStyle from "../styles/GlobalStyle";
-import { darkTheme } from "../styles/theme";
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { AuthProvider } from 'context/auth-context.jsx';
+import GlobalStyle from '../styles/GlobalStyle';
+import { darkTheme } from '../styles/theme';
+import { ReactQueryConfigProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query-devtools';
+import SnackbarProvider from 'react-simple-snackbar';
 
+const queryConfig = {
+  queries: {
+    refetchOnWindowFocus: true,
+    retry(failureCount, error) {
+      if (error.status === 404) return false;
+      else if (failureCount < 2) return false;
+      else return false;
+    },
+  },
+};
 function AppProviders({ children }) {
   return (
-    <ThemeProvider theme={darkTheme}>
-      <GlobalStyle />
-      {children}
-    </ThemeProvider>
+    <ReactQueryConfigProvider config={queryConfig}>
+      <Router>
+        <AuthProvider>
+          <SnackbarProvider>
+            <ThemeProvider theme={darkTheme}>
+              <GlobalStyle />
+              <ReactQueryDevtools />
+              {children}
+            </ThemeProvider>
+          </SnackbarProvider>
+        </AuthProvider>
+      </Router>
+    </ReactQueryConfigProvider>
   );
 }
 
