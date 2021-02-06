@@ -1,17 +1,91 @@
-import express from "express";
+import { PrismaClient } from '@prisma/client';
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import { protect } from '../middleware/authorization';
+
+import { OAuth2Client } from 'google-auth-library';
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const prisma = new PrismaClient();
 // A function to get the routes.
 // All route definitions are in one place and we only need to export one thing
 function getAuthRoutes() {
   const router = express.Router();
 
+  router.get('/current-user', (req, res) => {
+    res.status(200).json({
+      user: {
+        id: '12',
+        username: 'Mary Sue',
+        email: 'mary@gmail.com',
+      },
+    });
+  });
+
+  router.post('/google-login', googleLogin);
+  router.get('/me', protect, me);
+  router.get('/signout', signout);
+
   return router;
 }
 
 // All controllers/utility functions here
-async function googleLogin(req, res) {}
+async function googleLogin(req, res) {
+  const { idToken } = req.body;
+  const ticket = await googleClient.verifyIdToken({
+    idToken,
+    audience: process.env.GOOGLE_CLIENT_ID,
+  });
+  const { name, picture, email } = ticket.getPayload();
 
-async function me(req, res) {}
+  let incomingUser = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  if (!incomingUser) {
+    incomingUser = await prisma.user.create({
+      data: {
+        username: name,
+        email,
+        avatar: picture,
+      },
+    });
+  }
+  const tokenPayload = { id: incomingUser.id };
+  const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRE,
+  });
+  res.cookie('token', token, { httpOnly: true });
+  res.status(200).send(token);
+}
 
-function signout(req, res) {}
+async function me(req, res) {
+  const subscriptions = await prisma.subscription.findMany({
+    where: {
+      subscriberId: {
+        equals: req.user.id,
+      },
+    },
+  });
+  const channelsIds = subscriptions.map(sub => sub.subscribedToId);
+  const channels = await prisma.user.findMany({
+    where: {
+      id: {
+        in: channelsIds,
+      },
+    },
+  });
+
+  const user = req.user;
+  user.channels = channels;
+  res.status(200).json({ user });
+}
+
+function signout(req, res) {
+  res.clearCookie('token');
+  res.status(200).json({});
+}
 
 export { getAuthRoutes };

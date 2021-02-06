@@ -481,7 +481,7 @@ async function getVideo(req, res, next) {
       },
     },
   });
-  video.comments = video.comments.length;
+  video.comments.count = video.comments.length;
   video.isLiked = Boolean(isLiked);
   video.isDisliked = Boolean(isDisliked);
   video.likesCount = likesCount;
