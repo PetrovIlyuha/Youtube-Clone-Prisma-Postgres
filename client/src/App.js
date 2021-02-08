@@ -1,7 +1,7 @@
 import MobileNavbar from 'components/MobileNavbar';
 import Navbar from 'components/Navbar';
 import Sidebar from 'components/Sidebar';
-import Subscriptions from 'components/Subscriptions';
+import Subscriptions from 'pages/Subscriptions';
 import { useLocationChange } from 'hooks/use-location-change';
 import Channel from 'pages/Channel';
 import History from 'pages/History';
