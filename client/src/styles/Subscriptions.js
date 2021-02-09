@@ -1,11 +1,16 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  padding: 0.3rem 1.3rem;
+  width: 100%;
+  margin: 0 auto;
+  padding-top: 2rem;
+  padding-bottom: 7rem;
   h4 {
     text-transform: uppercase;
     margin-bottom: 0.5rem;
     letter-spacing: 1.2px;
-    color: ${(props) => props.theme.secondaryColor};
+    color: ${props => props.theme.secondaryColor};
     padding-left: 1.5rem;
   }
 
@@ -19,7 +24,7 @@ const Wrapper = styled.div`
 
   .channel:hover {
     cursor: pointer;
-    background: ${(props) => props.theme.darkGrey};
+    background: ${props => props.theme.darkGrey};
   }
 
   .channel img {
@@ -27,7 +32,7 @@ const Wrapper = styled.div`
     width: 22px;
     height: 22px;
     object-fit: cover;
-    border-radius: 11px;
+    border-radius: 50%;
   }
 `;
 
