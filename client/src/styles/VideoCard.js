@@ -1,6 +1,9 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  border-radius: 4px;
+  box-shadow: 2px 4px 15px -5px rgba(255, 255, 255, 0.3);
+  padding: 7px;
   .thumb {
     width: 100%;
     height: 180px;

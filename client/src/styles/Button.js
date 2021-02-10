@@ -1,12 +1,12 @@
 // @ts-nocheck
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components';
 
 const Button = styled.button`
   padding: 10px 16px;
-  font-family: ${(props) => props.font};
-  background: ${(props) => props.theme.red};
-  color: ${(props) => props.theme.white};
-  border: 1px solid ${(props) => props.theme.red};
+  font-family: ${props => props.font};
+  background: ${props => props.theme.red};
+  color: ${props => props.theme.white};
+  border: 1px solid ${props => props.theme.red};
   border-radius: 1px;
   font-weight: 400;
   font-size: 14px;
@@ -21,12 +21,12 @@ const Button = styled.button`
     padding: 5px 8px;
   }
 
-  ${(props) =>
+  ${props =>
     props.grey &&
     css`
-      background: ${(props) => props.theme.darkGrey};
-      border: 1px solid ${(props) => props.theme.darkGrey};
-      color: ${(props) => props.theme.secondaryColor};
+      background: ${props => props.theme.darkGrey};
+      border: 1px solid ${props => props.theme.darkGrey};
+      color: ${props => props.theme.secondaryColor};
     `}
 `;
 

@@ -1,11 +1,12 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const Wrapper = styled.div`
+  margin-top: 1rem;
   svg {
     width: 30px;
     height: 30px;
     margin-left: 1rem;
-    fill: ${(props) => props.theme.darkGrey};
+    fill: ${props => props.theme.darkGrey};
   }
 
   div {
