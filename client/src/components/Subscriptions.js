@@ -1,11 +1,23 @@
-import React from "react";
-import Wrapper from "../styles/Subscriptions";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Wrapper from '../styles/Subscriptions';
 
-function Subscriptions() {
+function Subscriptions({ user }) {
+  if (!user) return null;
   return (
     <Wrapper>
-      <h4>Subscriptions</h4>
-      Subscribed Channels
+      {user.channels.length ? <h4>Subscriptions</h4> : null}
+
+      {user.channels.length
+        ? user.channels.map(channel => (
+            <Link to={`/channel/${channel.id}`} key={channel.id}>
+              <div className='channel'>
+                <img src={channel.avatar} alt={`${channel.username}`} />
+                <span>{channel.username}</span>
+              </div>
+            </Link>
+          ))
+        : null}
     </Wrapper>
   );
 }
