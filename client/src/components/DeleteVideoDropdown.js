@@ -1,11 +1,20 @@
-import { Menu, MenuButton, MenuItem, MenuList } from "@reach/menu-button";
-import "@reach/menu-button/styles.css";
-import React from "react";
-import { DeleteIcon, SettingsIcon } from "./Icons";
+import { Menu, MenuButton, MenuItem, MenuList } from '@reach/menu-button';
+import '@reach/menu-button/styles.css';
+import { useAuth } from 'context/auth-context';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { deleteVideo } from 'utils/api-client';
+import { DeleteIcon, SettingsIcon } from './Icons';
 
-function DeleteVideoDropdown() {
-  const isVideoAuthor = true;
+function DeleteVideoDropdown({ video }) {
+  const user = useAuth();
+  const history = useHistory();
+  const isVideoAuthor = user?.id === video.userId;
 
+  const handleDeleteVideo = async () => {
+    await deleteVideo(video.id);
+    history.push(`/channel/${user.id}`);
+  };
   if (isVideoAuthor) {
     return (
       <div>
@@ -14,7 +23,7 @@ function DeleteVideoDropdown() {
             <SettingsIcon />
           </MenuButton>
           <MenuList>
-            <MenuItem onSelect={() => null}>
+            <MenuItem onSelect={handleDeleteVideo}>
               <DeleteIcon />
               <span>Delete Video</span>
             </MenuItem>
