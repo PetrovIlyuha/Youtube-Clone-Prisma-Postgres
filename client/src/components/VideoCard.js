@@ -1,38 +1,41 @@
-import React from "react";
-import Avatar from "../styles/Avatar";
-import Wrapper from "../styles/VideoCard";
-import DeleteVideoDropdown from "./DeleteVideoDropdown";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { formatCreatedAt } from 'utils/date';
+import Avatar from '../styles/Avatar';
+import Wrapper from '../styles/VideoCard';
+import DeleteVideoDropdown from './DeleteVideoDropdown';
 
-function VideoCard() {
+function VideoCard({ video, hideAvatar, noUsername }) {
   return (
     <Wrapper>
-      <span>
-        <img
-          className="thumb"
-          src="https://dummyimage.com/1280x720"
-          alt="thumbnail"
-        />
-      </span>
-      <div className="video-info-container">
-        <div className="channel-avatar">
-          <Avatar
-            style={{ marginRight: "0.8rem" }}
-            src="https://dummyimage.com/100x100"
-            alt="channel avatar"
-          />
+      <Link to={`/watch/${video.id}`}>
+        <img className='thumb' src={video.thumbnail} alt='thumbnail' />
+      </Link>
+      <div className='video-info-container'>
+        <div className='channel-avatar'>
+          {!hideAvatar && (
+            <Avatar
+              style={{ marginRight: '0.8rem' }}
+              src={video.user.avatar}
+              alt={`${video.user.username}'s channel avatar`}
+            />
+          )}
         </div>
-        <div className="video-info">
-          <span>
-            <h4 className="truncate">Title</h4>
-          </span>
-          <span>
-            <span className="secondary">Username</span>
-          </span>
-          <p className="secondary leading-4">
-            <span>Views views</span> <span>•</span> <span>CreatedAt</span>
+        <div className='video-info'>
+          <Link to={`/watch/${video.id}`}>
+            <h4 className='truncate'>{video.title}</h4>
+          </Link>
+          {!noUsername && (
+            <span>
+              <span className='secondary'>{video.user.username}</span>
+            </span>
+          )}
+          <p className='secondary leading-4'>
+            <span>{video.views} views</span> <span>•</span>{' '}
+            <span>{formatCreatedAt(video.createdAt)}</span>
           </p>
         </div>
-        <DeleteVideoDropdown />
+        <DeleteVideoDropdown video={video} />
       </div>
     </Wrapper>
   );
