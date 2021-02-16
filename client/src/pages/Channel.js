@@ -42,7 +42,7 @@ function Channel() {
       <SignUpCard
         icon={<VidIcon />}
         title='Manage your videos'
-        description='Sign in to upload and manage your videos, pre-recorded or live'
+        description='Sign in to upload and manage your videos, pre-recorded or live ones'
       />
     );
   }
