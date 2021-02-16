@@ -1,12 +1,12 @@
-import React from "react";
-import ErrorMessage from "./ErrorMessage";
+import React from 'react';
+import ErrorMessage from './ErrorMessage';
 
 function ErrorFallback({ error }) {
   return (
     <ErrorMessage
       error={error}
       style={{
-        height: "100vh",
+        height: '100vh',
         marginTop: 0,
       }}
     />

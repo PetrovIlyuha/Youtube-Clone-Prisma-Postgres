@@ -37,4 +37,4 @@ function Comment({ comment }) {
   );
 }
 
-export default CommentList;
+export default React.memo(CommentList);
